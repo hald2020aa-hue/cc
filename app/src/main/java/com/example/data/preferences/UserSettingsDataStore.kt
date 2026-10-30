@@ -39,6 +39,7 @@ data class UserSettings(
     val showPageNumber: Boolean = true,
     val showCommentsAtEnd: Boolean = true,
     val loadPagesWifiOnly: Boolean = true,
+    val loadPagesMode: String = "عبر واي فاي فقط",
     val hideMenuButton: Boolean = true,
     val customBrightnessEnabled: Boolean = false,
     val customBrightnessLevel: Int = 20,
@@ -80,6 +81,7 @@ class UserSettingsDataStore(private val context: Context) {
         val SHOW_PAGE_NUMBER = booleanPreferencesKey("show_page_number")
         val SHOW_COMMENTS_END = booleanPreferencesKey("show_comments_end")
         val LOAD_PAGES_WIFI_ONLY = booleanPreferencesKey("load_pages_wifi_only")
+        val LOAD_PAGES_MODE = stringPreferencesKey("load_pages_mode")
         val HIDE_MENU_BUTTON = booleanPreferencesKey("hide_menu_button")
         val CUSTOM_BRIGHTNESS_ENABLED = booleanPreferencesKey("custom_brightness_enabled")
         val CUSTOM_BRIGHTNESS_LEVEL = intPreferencesKey("custom_brightness_level")
@@ -120,6 +122,7 @@ class UserSettingsDataStore(private val context: Context) {
             showPageNumber = prefs[Keys.SHOW_PAGE_NUMBER] ?: true,
             showCommentsAtEnd = prefs[Keys.SHOW_COMMENTS_END] ?: true,
             loadPagesWifiOnly = prefs[Keys.LOAD_PAGES_WIFI_ONLY] ?: true,
+            loadPagesMode = prefs[Keys.LOAD_PAGES_MODE] ?: "عبر واي فاي فقط",
             hideMenuButton = prefs[Keys.HIDE_MENU_BUTTON] ?: true,
             customBrightnessEnabled = prefs[Keys.CUSTOM_BRIGHTNESS_ENABLED] ?: false,
             customBrightnessLevel = prefs[Keys.CUSTOM_BRIGHTNESS_LEVEL] ?: 20,
@@ -145,6 +148,7 @@ class UserSettingsDataStore(private val context: Context) {
                 "readingMode" -> prefs[Keys.READING_MODE] = value
                 "pageFitMode" -> prefs[Keys.PAGE_FIT_MODE] = value
                 "scrollDirection" -> prefs[Keys.SCROLL_DIRECTION] = value
+                "loadPagesMode" -> prefs[Keys.LOAD_PAGES_MODE] = value
                 "userProfileName" -> prefs[Keys.USER_PROFILE_NAME] = value
                 "userProfileEmail" -> prefs[Keys.USER_PROFILE_EMAIL] = value
             }

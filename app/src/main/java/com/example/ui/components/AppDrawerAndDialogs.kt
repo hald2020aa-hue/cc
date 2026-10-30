@@ -587,16 +587,16 @@ fun AddSiteFlowDialog(
                                     .height(44.dp)
                                     .testTag("submit_step1_add_site_button")
                             ) {
-                                Text(
-                                    text = "إضافة",
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
                                 Icon(
                                     imageVector = Icons.Default.Add,
                                     contentDescription = null,
                                     modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "إضافة",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                             }
                         }

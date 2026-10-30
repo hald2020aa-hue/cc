@@ -242,7 +242,7 @@ fun StorageSettingsScreen(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "العناصر: $searchHistoryCount",
+                text = "العناصر: ${MainViewModel.toArabicDigits(searchHistoryCount.toString())}",
                 color = TextSecondaryGrey,
                 fontSize = 14.sp
             )
@@ -464,12 +464,28 @@ fun ReadingOptionsSettingsScreen(
             checked = settings.showCommentsAtEnd,
             onCheckedChange = { onUpdateBoolean("showCommentsAtEnd", it) }
         )
-        SettingsSwitchItem(
-            title = "تحميل الصفحات",
-            subtitle = "عبر واي فاي فقط",
-            checked = settings.loadPagesWifiOnly,
-            onCheckedChange = { onUpdateBoolean("loadPagesWifiOnly", it) }
-        )
+
+        // Clickable preference row for تحميل الصفحات (matching 01:25-01:26 in video)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { activeDialogKey = "loadPagesMode" }
+                .padding(horizontal = 20.dp, vertical = 14.dp)
+        ) {
+            Text(
+                text = "تحميل الصفحات",
+                color = TextPrimaryWhite,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(3.dp))
+            Text(
+                text = settings.loadPagesMode,
+                color = TextSecondaryGrey,
+                fontSize = 13.sp
+            )
+        }
+
         SettingsSwitchItem(
             title = "إخفاء زر القائمة",
             subtitle = "سيصبح غير مرئي، لكن لا يزال قابل للنقر",
@@ -531,6 +547,7 @@ fun ReadingOptionsSettingsScreen(
         val (dialogTitle, options, currentVal) = when (activeDialogKey) {
             "readingMode" -> Triple("الوضع", listOf("الصفحات", "ويبتون مستمر", "صفحة مزدوجة"), settings.readingMode)
             "pageFitMode" -> Triple("وضع حجم الصفحة", listOf("تناسب الشاشة", "تناسب العرض", "تناسب الارتفاع"), settings.pageFitMode)
+            "loadPagesMode" -> Triple("تحميل الصفحات", listOf("عبر واي فاي فقط", "دائماً"), settings.loadPagesMode)
             else -> Triple("إتجاه التمرير", listOf("من اليسار لليمين", "من اليمين لليسار", "عمودي"), settings.scrollDirection)
         }
         AlertDialog(

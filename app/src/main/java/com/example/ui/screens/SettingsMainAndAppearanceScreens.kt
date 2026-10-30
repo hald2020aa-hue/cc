@@ -185,6 +185,15 @@ fun SettingsMainScreen(
         }
 
         // Bottom Pager Dots + "العضوية المميزة" Card (01:10, 01:17, 01:35)
+        var currentBannerSlide by remember { androidx.compose.runtime.mutableIntStateOf(2) }
+        val bannerSlides = remember {
+            listOf(
+                "العضوية المميزة" to "تصفح سريع وبدون إعلانات مزعجة",
+                "النسخ الاحتياطي" to "احفظ مواقعك ومفضلتك واستعدها بضغطة زر",
+                "العضوية المميزة" to "بدون اعلانات + علامة التوثيق ومزايا إضافية"
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -195,9 +204,16 @@ fun SettingsMainScreen(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(modifier = Modifier.size(7.dp).clip(CircleShape).background(Color(0xFF555966)))
-                Box(modifier = Modifier.size(7.dp).clip(CircleShape).background(Color(0xFF555966)))
-                Box(modifier = Modifier.size(7.dp).clip(CircleShape).background(Color(0xFF9EA4B8)))
+                for (index in 0..2) {
+                    val isSelectedDot = currentBannerSlide == index
+                    Box(
+                        modifier = Modifier
+                            .size(if (isSelectedDot) 8.dp else 7.dp)
+                            .clip(CircleShape)
+                            .background(if (isSelectedDot) Color(0xFF9EA4B8) else Color(0xFF555966))
+                            .clickable { currentBannerSlide = index }
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -207,7 +223,9 @@ fun SettingsMainScreen(
                 color = Color(0xFF171A24),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { showPremiumDialog = true }
+                    .clickable {
+                        currentBannerSlide = (currentBannerSlide + 1) % bannerSlides.size
+                    }
             ) {
                 Row(
                     modifier = Modifier
@@ -216,7 +234,10 @@ fun SettingsMainScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Verified,
                             contentDescription = null,
@@ -226,13 +247,13 @@ fun SettingsMainScreen(
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = "العضوية المميزة",
+                                text = bannerSlides[currentBannerSlide].first,
                                 color = TextPrimaryWhite,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "بدون إعلانات + مزامنة سحابية",
+                                text = bannerSlides[currentBannerSlide].second,
                                 color = TextSecondaryGrey,
                                 fontSize = 12.sp
                             )

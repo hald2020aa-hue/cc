@@ -93,7 +93,7 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
 
     private val _screenBackStack = MutableStateFlow<List<AppScreen>>(emptyList())
 
-    private val _browserUrl = MutableStateFlow("https://www.google.com")
+    private val _browserUrl = MutableStateFlow("https://www.google.com/?hl=ar")
     val browserUrl: StateFlow<String> = _browserUrl.asStateFlow()
 
     private val _browserTitle = MutableStateFlow("Google")
@@ -556,6 +556,21 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
     fun isNetworkConnected(): Boolean = repository.isNetworkAvailable()
 
     companion object {
+        fun toArabicDigits(input: String): String {
+            val arabicDigits = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+            val sb = StringBuilder(input.length)
+            for (ch in input) {
+                if (ch in '0'..'9') {
+                    sb.append(arabicDigits[ch - '0'])
+                } else if (ch == '.' || ch == ',') {
+                    sb.append('٫')
+                } else {
+                    sb.append(ch)
+                }
+            }
+            return sb.toString()
+        }
+
         fun formatBytesArabic(bytes: Long): String {
             if (bytes <= 0L) return "0 B"
             val kb = bytes / 1024.0
@@ -563,9 +578,9 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
             val gb = mb / 1024.0
             val df = DecimalFormat("#.#")
             return when {
-                gb >= 1.0 -> "${df.format(gb).replace('.', '٫')} GB"
-                mb >= 0.1 -> "${df.format(mb).replace('.', '٫')} MB"
-                kb >= 1.0 -> "${df.format(kb).replace('.', '٫')} KB"
+                gb >= 1.0 -> "${toArabicDigits(df.format(gb))} GB"
+                mb >= 0.1 -> "${toArabicDigits(df.format(mb))} MB"
+                kb >= 1.0 -> "${toArabicDigits(df.format(kb))} KB"
                 else -> "$bytes B"
             }
         }

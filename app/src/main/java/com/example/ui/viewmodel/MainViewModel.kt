@@ -125,6 +125,24 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
 
     init {
         refreshStorageStats()
+        viewModelScope.launch {
+            repository.settingsFlow.collect { userSettings ->
+                if (_screenBackStack.value.isEmpty() && _currentScreen.value == AppScreen.STORAGE) {
+                    val mapped = when (userSettings.startScreen) {
+                        "التوصيات" -> AppScreen.RECOMMENDATIONS
+                        "التحديثات" -> AppScreen.UPDATES
+                        "المفضلة" -> AppScreen.FAVORITES
+                        "السجل" -> AppScreen.HISTORY
+                        "إدارة المواقع" -> AppScreen.MANAGE_SITES
+                        else -> AppScreen.STORAGE
+                    }
+                    if (mapped != AppScreen.STORAGE) {
+                        _currentScreen.value = mapped
+                    }
+                }
+                return@collect
+            }
+        }
     }
 
     fun navigateTo(screen: AppScreen, addToBackStack: Boolean = true) {
